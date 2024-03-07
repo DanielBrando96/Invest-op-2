@@ -1,5 +1,5 @@
 let size= 0;
-let array =[];
+let my_array =[];
 
 $("#3x3")[0].onclick= function(){
     size = 3;
@@ -40,7 +40,7 @@ function matrix_visibility(matrix_size) {
 return
 }
 $("#calculate")[0].onclick= function(){
-   array = create_array();
+   my_array = create_array();
 }
 function create_array () {
     if (size = 3){

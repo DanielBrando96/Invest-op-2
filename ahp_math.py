@@ -1,20 +1,23 @@
 import numpy as np
 
-# Matriz de comparación A
-A = np.array([[1, 2, 6], [1/2, 1, 3], [1/6, 1/3, 1]])
+def calculate_eigenvector(matrix):
+    eigenvalues, eigenvectors = np.linalg.eig(matrix)
+    max_eigenvalue_index = np.argmax(eigenvalues)
+    eigenvector = eigenvectors[:, max_eigenvalue_index]
+    eigenvector /= np.sum(eigenvector)
+    return eigenvector
 
-# Normalizar la matriz
-column_sums = A.sum(axis=0)
-A_norm = A / column_sums
+def calculate_consistency_ratio(matrix):
+    n = len(matrix)
+    weights = calculate_eigenvector(matrix)
+    lambda_max = np.max(np.linalg.eigvals(matrix))
+    consistency_index = (lambda_max - n) / (n - 1)
+    random_indices = {1: 0, 2: 0, 3: 0.58, 4: 0.90, 5: 1.12, 6: 1.24, 7: 1.32, 8: 1.41, 9: 1.45, 10: 1.49, 11: 1.51, 12: 1.48, 13: 1.56, 14: 1.57, 15: 1.59}
+    random_index = random_indices[n]
+    consistency_ratio = consistency_index / random_index
+    return consistency_ratio
 
-# Calcular el vector de prioridades
-priorities = A_norm.mean(axis=1)
-n = len(A)
-lambda_max = max(np.linalg.eigvals(A))
-CI = (lambda_max - len(A)) / (len(A) - 1)
-random_indices = {1: 0, 2: 0, 3: 0.58, 4: 0.90, 5: 1.12, 6: 1.24, 7: 1.32, 8: 1.41, 9: 1.45, 10: 1.49, 11: 1.51, 12: 1.48, 13: 1.56, 14: 1.57, 15: 1.59}
-RI = random_indices[n]
-CR = CI / RI
-
-CI_decimal = '{:.15f}'.format(CI)
-CR_decimal = '{:.15f}'.format(CR)
+def run_ahp(A):
+    eigenvector = calculate_eigenvector(A)
+    consistency_ratio = calculate_consistency_ratio(A)
+    return eigenvector,consistency_ratio
